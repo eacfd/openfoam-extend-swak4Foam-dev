@@ -143,6 +143,11 @@ public:
             return true;
         }
 
+        //- What is type of points outside bounds
+        virtual volumeType outsideVolumeType() const
+        {
+            return VOLTYPE_OUTSIDE;
+        }
 
         // Multiple point queries.
 

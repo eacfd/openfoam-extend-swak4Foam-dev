@@ -25,6 +25,7 @@ License
 
 Contributors/Copyright:
     2011, 2013, 2015-2018 Bernhard F.W. Gschaider <bgschaid@hfd-research.com>
+    2018 Mark Olesen <Mark.Olesen@esi-group.com>
 
  SWAK Revision: $Id$
 \*---------------------------------------------------------------------------*/
@@ -124,7 +125,9 @@ bool executeIfEnvironmentVariableFunctionObject::condition()
 
 void executeIfEnvironmentVariableFunctionObject::readData(const dictionary& dict)
 {
-    fitVariableMode_=fitVariableModeNames_[dict.lookup("fitVariableMode")];
+    fitVariableMode_=fitVariableModeNames_[
+        word(dict.lookup("fitVariableMode"))
+    ];
     variableName_=word(dict.lookup("variableName"));
 
     if(fitVariableMode_==fvmFitsRegexp) {

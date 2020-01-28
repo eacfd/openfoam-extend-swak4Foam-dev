@@ -25,6 +25,7 @@ License
 
 Contributors/Copyright:
     2011-2018 Bernhard F.W. Gschaider <bgschaid@hfd-research.com>
+    2018 Mark Olesen <Mark.Olesen@esi-group.com>
 
  SWAK Revision: $Id$
 \*---------------------------------------------------------------------------*/
@@ -292,11 +293,11 @@ RawFoamDictionaryParserDriver &generalInterpreterWrapper::getParser() {
         Dbug << "No parser" << endl;
         RawFoamDictionaryParserDriver::ErrorMode mode=
             RawFoamDictionaryParserDriver::errorModeNames[
-                dict().lookup(
+                word(dict().lookup(
                     interpreterName()
                     +
                     "DictionaryParserErrorMode"
-                )
+                ))
             ];
         Dbug << "Creating with mode " << mode << endl;
         parser_=this->getParserInternal(mode);
@@ -586,7 +587,7 @@ void generalInterpreterWrapper::scatterGlobals()
 
         //- do the scattering by ourself
         List<Pstream::commsStruct> comms;
-        if (Pstream::nProcs() < Pstream::nProcsSimpleSum)
+        if (int(Pstream::nProcs()) < Pstream::nProcsSimpleSum)
         {
             comms=Pstream::linearCommunication();
         }
@@ -686,7 +687,7 @@ void generalInterpreterWrapper::dictionariesToInterpreterStructs() {
             ? obr_
             : obr_.time().lookupObject<objectRegistry>(regionName);
 
-        const dictionary &source=obr.lookupObject<dictionary>(dictName);
+        const dictionary &source=obr.lookupObject<IOdictionary>(dictName);
 
         insertDictionary(
             name,

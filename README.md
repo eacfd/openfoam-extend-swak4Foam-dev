@@ -65,17 +65,19 @@ In alphabetical order of the surname
 -   **E.David Huckaby:** Add the writing of particles to `writeFieldsOften`
 -   **Alexey Matveichev:** -   release generation script.
     -   Automatic `swakConfiguration`
--   **Mark Olesen:** -   port to OpenFOAM+ v1612
+-   **Mark Olesen:** -   port to OpenFOAM+ since v1612
     -   improvements to scripts
 -   **Philippose Rajan:** -   Bugfix for segmentation faults in parallel
+-   **Matti Rauter:** -   Spell-checking the compilation scripts
 
 If anyone is forgotten: let me know
 
-According to the commits in the `mercurial`-repository (and
-the repositories of the projects from which swak emerged)
-contributors are (ordered by the year of their first contribution):
+According to the commits in the `mercurial`-repository (and the
+repositories of the projects from which swak emerged) contributors
+are (ordered by the year of their first contribution. EMail is the
+latest under which this author submitted):
 
--   2006-2017 Bernhard F.W. Gschaider <bgschaid@hfd-research.com>
+-   2006-2018 Bernhard F.W. Gschaider <bgschaid@hfd-research.com>
 -   2008 Hannes Kroeger (hannes@kroegeronline.net)
 -   2008-2009, 2012 Martin Beaudoin, Hydro-Quebec (beaudoin.martin@ireq.ca)
 -   2010 Marianne Mataln <mmataln@ice-sf.at>
@@ -88,7 +90,7 @@ contributors are (ordered by the year of their first contribution):
 -   2014 David Huckaby <e.david.huckaby@netl.doe.gov>
 -   2015 Domink Christ <d.christ@wikki.co.uk>
 -   2015 Alexey Matveichev <alexey.matveichev@gmail.com>
--   2016-2017 Mark Olesen <mark@opencfd>
+-   2016-2018 Mark Olesen <Mark.Olesen@esi-group.com>
 
 
 ## Documentation
@@ -98,19 +100,27 @@ See: <http://openfoamwiki.net/index.php/contrib/swak4Foam>
 
 # Installation/Compilation
 
+If everything goes well then
+
+    ./AllwmakeAll
+
+should compile the essential requirements before compiling
+`swak4Foam` itself (remember: there is an **if** in that sentence)
+
 
 ## Requirements
 
 -   Version 2.0 or higher of OpenFOAM and version 3.0 or higher of
-    Foam.  The `OpenFOAM-dev` is also supported but because this is
-    frequently changing compilation may fail. The branch
-    `feature/port_of-dev` of the development repository **may** work
-    better
+    Foam.
+
+    The oldest version that this is release has been tested with is
+    OpenFOAM 2.3
+
+    To see which versions this release has been tested with see
+    `Documentation/examplesCompatibilityMatrix.org`
 -   the compiler generators `bison` and `flex`
-    -   **bison:** `swak4Foam` is known to work with `bison` version 2.4 and
-        higher. Version 2.3 compiles but the plugin-functionality does
-        not work correctly.
-        Version 3.0 does **not** work
+    -   **bison:** `swak4Foam` is known to work with `bison` version 3.3 and
+        higher.
     -   **flex:** since the introduction of the plugin functions at least
         a flex version of `2.5.33` is required (`2.5.35` is the
         lowest **confirmed** version)
@@ -702,7 +712,7 @@ cases for `swak4Foam`, not *best practice* examples for OpenFOAM
 
 ### groovyBC
 
-The old `groovyBC`-Demos
+The old `groovyBC`-Demos and newer cases that use `groovyBC`
 
 
 #### pulsedPitzDaily
@@ -791,6 +801,22 @@ The old `groovyBC`-Demos
     condition
 
 
+#### jumpChannel
+
+-   **Solver:** icoFoam
+-   **Preparation:** run `pyFoamPrepareCase.py`
+-   **Description:** Demonstrates `groovyBC` on cyclic patches and
+    the `groovyBCJump`-condition
+
+
+#### nonBreakingDam
+
+-   **Solver:** interFoam
+-   **Preparation:** run `pyFoamPrepareCase.py`
+-   **Description:** OpenFOAM macro-expansion inside of expression
+    strings
+
+
 ### FunkyDoCalc
 
 Example dictionaries for `funkyDoCalc`
@@ -805,6 +831,11 @@ Example dictionary for `funkySetFields`
 
 Example dictionary for `funkySetBoundaryFields`. Sets nonsense
 boundary conditions for the world famous `damBreak`-case
+
+
+### ImmersedBC
+
+Cases that demonstrate the immersed boundary conditions of `foam-extend`
 
 
 ### InterFoamWithSources
@@ -1266,6 +1297,20 @@ replaced by an expression
 -   **Demonstrates:** The `groovyCyclicACMI` patch type. State machines. `funkyWarpMesh` utility
 
 
+### runTimeControl
+
+Demonstrating the run-time trigger
+
+
+#### simpleSwakCar
+
+Simple modification of the `simpleCar`-case
+
+-   **Solver:** `simpleFoam`
+-   **Case setup:** `pyFoamPrepareCase`
+-   **Demonstrates:** the run-time trigger with expressions.
+
+
 ### tests
 
 Simple test cases for specific features. The names of the
@@ -1364,30 +1409,45 @@ to make sure that there wasn't a problem with that.
 Contributions to to `swak4Foam` are most welcome. If you want to
 contribute clone the Mercurial archive of the sources
 
-    hg clone http://openfoam-extend.hg.sourceforge.net:8000/hgroot/openfoam-extend/swak4Foam
+    hg clone http://hg.code.sf.net/p/openfoam-extend/swak4Foam
 
-Change to the branch that you want to improve (usually `default`)
+or use the *Fork* link at
+<https://sourceforge.net/p/openfoam-extend/swak4Foam/ci/develop/tree/>
+to create your own fork and clone that (there is also copy of the
+repository at
+<https://bitbucket.org/bgschaid/swak4foam-temporary-replacement-for-original-repo-on>
+if you prefer that. But it does not receive pushes as often as the
+Sourceforge repository. Please avoid any `git`-clones of the
+repository. They are unsupported and contributions through them
+will take longer to be incorporated - if at all. The maintainer is
+aware that `git` is the Windows of the `DVCS`-world: used because
+it is the first thing people are exposed to. Not because of the
+technical merit)
+
+Change to the branch that you want to improve (usually `develop`)
 and create a new branch
 
     hg branch <branchName>
 
 where `<branchname>` is an easily identifiable name that makes the
 purpose of the branch clear (for instance
-`hotfix/WrongRandomFunction` or `feature/HyperbolicFunctions`). Don't
-work on the `default` branch or any other branches that are not
-"yours". Such contributions will not be merged
+`hotfix/WrongRandomFunction` or `feature/HyperbolicFunctions`. For
+details see [6.2.2](#org67eb0db) below). Don't work on the
+`default` branch or any other branches that are not "yours". Such
+contributions will not be merged
 
-Once development on the branch is finished export the relevant
-changesets with
+Once development on the branch is finished you can either issue a
+*Pull request* (if you forked on SourceForge or BitBucket) or
+export the relevant changesets with
 
     hg export <nodeID>
 
 (`nodeID` being the ids of "your" changesets) and send them to the
 maintainer (or attach them to a bug report on Manits). The changes
-will be reviewed and merged into the `default` branch (do not
-attempt to do this yourself). Patches generated with `hg export`
-make sure that all changes are attributed to the original developer
-(you).
+will be reviewed and merged into the `develop` branch (do not
+attempt to do this yourself) and subsequently into the
+release. Patches generated with `hg export` make sure that all
+changes are attributed to the original developer (you).
 
 An alternative would be the `bundle` command. Just do
 
@@ -1397,12 +1457,13 @@ and then send the `bundlefile`. This will include **all** commits
 that are not in the upstream repository and will allow similar
 inclusion in the upstream as `export`.
 
-Once you have proven by successfully submitting changesets via `hg
-   export` you can ask for write access to the mercurial repository.
-
 Only if you got through Mercurial it can be ensured that your
 contribution is recognized (if you want to stay anonymous send
 patches).
+
+Before submitting the branch please add a description to the
+`README` (have a look at the `History`-part below). This will be
+merged
 
 
 ### Suggest reading
@@ -1427,7 +1488,26 @@ These topics may be "new" for the average OF-developer:
     hg diff -c 8604e865cce6
 
 
-### Special branches
+<a id="org67eb0db"></a>
+
+### Repository organization
+
+The organization of the repository is according to the Driessen
+branching model described here
+<https://nvie.com/posts/a-successful-git-branching-model/> . To
+enforce it this mercurial extension is recommended
+<https://bitbucket.org/yujiewu/hgflow/wiki/Home>
+For instance if a new feature `foo` should be added then a command
+
+    hg flow feature start foo
+
+creates a new branch `feature/foo` from the develop branch which
+later can be merged back with
+
+    hg flow feature finish
+
+
+#### Special branches
 
 Currently the main branches are:
 
@@ -1438,23 +1518,6 @@ Currently the main branches are:
     `swak4Foam`. If somebody wants to "inherit" this: contact the
     maintainer
 -   **develop:** Actual development branch
-
-
-### Distributed bug-tracking
-
-As an experimental feature distributed bug-tracking was introduced
-using the *Artemis*-extension for *Mercurial* (see
-<http://hg.mrzv.org/Artemis/>). An up-to-date version can be
-installed by
-
-    hg clone http://hg.mrzv.org/Artemis/
-
-somewhere and installing the plugin by editing `.hgrc`.
-
-This is **not** the official bug-tracker for `swak4Foam`. It is used
-for keeping track of new features that are to be introduced to
-`swak4Foam` and may be discontinued if the experiment proves to be
-unsuccessful.
 
 
 ### Maintaining feature and hotfix-branches
@@ -1587,6 +1650,18 @@ Foam-Distro
 
 Currently only the data from scalar fields can be correctly
 parsed. If `vector`-fields are specified the function object fails
+
+
+## Failing `Python2` and `Python3` integration if Floating Point Exception is enabled
+
+On some platforms if floating point exceptions are enabled then
+importing `numpy` fails because it seems to use FPEs to detect
+properties of the floating point implementation. This makes the
+whole program fail.
+
+Only known workaround is switching FPE-trapping off by
+
+    export FOAM_SIGFPE=false
 
 
 # History
@@ -6184,7 +6259,14 @@ capabilities of the `swakDynamicMesh`-library.
     has no `ACMI`
 
 
-## Next release - version number : 0.4.2
+## 2018-12-29 - version number : 0.4.2
+
+The Foam-versions that this release has been tested with are
+
+-   OpenFOAM 2.3
+-   OpenFOAM 6.0
+-   OpenFOAM+ v1806
+-   Foam-Extend 4.0
 
 
 ### New supported versions
@@ -6205,10 +6287,33 @@ Some adaptions were required to make this compile
 Minor adaptions were required to make this compile by Mark Olesen
 
 
+#### OpenFOAM+ v1806
+
+Adaptions supplied by Mark Olesen. Adaptions needed after the release
+
+This is one of the versions that this release is tested with
+
+
 #### foam-extend 4.1
 
 This is a work in progress based on the `nextRelease`-branch as
 there is no release yet
+
+This is one of the versions that this release is tested with
+
+
+#### OpenFOAM 6
+
+Compiles.
+
+This is one of the versions that this release is tested with
+
+
+#### OpenFOAM+ v1812
+
+Adaptions supplied by Mark Olesen.
+
+This will be the officially tested version after this release
 
 
 ### Incompatibilities
@@ -6225,6 +6330,13 @@ that field have to be provided
 
 These environment variables are now renamed from `_PYTHON_` to
 `_PYTHON2_`. Scripts are adapted
+
+
+#### `funkyDoCalc`-files with an entry `expressions` assumed to be new format
+
+If one of the dictionaries in the specification file for
+`funkyDoCalc` is named `expressions` it is assumed that the file
+is in the new format and calculations will probably fail
 
 
 ### Bug fixes
@@ -6249,6 +6361,66 @@ These particles could not be read data from different time-steps
 if the number of particles differed between them. This has been fixed
 
 
+#### `funkyDoCalc` does not write data files correctly for parallel cases
+
+In parallel cases the same data was written to each
+`processor`-directory when writing CSV-files or
+distributions. This has been fixed so that the data is written
+similarly to single-CPU-cases
+
+
+#### Horrible spelling mistake in the `Allwmake`
+
+Reported by Matti Rauter at
+<https://twitter.com/igt_matti/status/989870314241880067>
+Fixed
+
+
+#### `groovyBCJumpAMI` not working correctly
+
+Because the reference was returned instead of the `tmp` some
+values were overwritten
+
+
+#### `patchFunctionObject` hangs with `processorCyclic` boundaries and regular expressions
+
+To enable `cyclic` boundary conditions on decomposed cases
+`processorCyclic` boundaries are created on **some**
+processors. Sometimes these boundaries are picked up by regular
+expressions in function objects derived from
+`patchFunctionObject` (for instance `patchExpression`). This
+makes the run hang
+
+This has been fixed by checking whether all processors have the
+same boundaries in the list and stopping if they haven't
+requesting the user to be more specific in the regular
+expressions
+
+
+#### Problem compiling on OF 5.0
+
+Fixed a compilation problem on 5.0 that was due to a wrong
+assumption about the change of an API in the `Random`-class (it
+happens one version later). Thanks for reporting it at
+<https://sourceforge.net/p/openfoam-extend/ticketsswak4foam/244/>
+to Daniel Pielmeier
+
+
+#### Failing `Python2` and `Python3` integration if Floating Point Exception is enabled
+
+On some platforms if floating point exceptions are enabled then
+importing `numpy` fails because it seems to use FPEs to detect
+properties of the floating point implementation. This makes the
+whole program fail.
+
+Only known workaround is switching FPE-trapping off by
+
+    export FOAM_SIGFPE=false
+
+Currently there is a warning issued the first time `numpy` is
+imported to guide the user to the fix
+
+
 ### Internals (for developers)
 
 
@@ -6267,6 +6439,36 @@ other interpreter languages
 If `swakConfiguation.automatic` is used as `swakConfiguation`
 then the highest available version of Python 2 and Python 3 is
 used for the integration of these two languages
+
+
+#### Change banner in Sources
+
+The regular OpenFOAM and the obsolete ICE-banner are removed and
+a new swak4Foam-banner are added to the source files. This
+modifies almost every file without changing any functionality
+
+
+#### Renaming of the Forks
+
+The three main supported forks are now renamed in the `#ifdef`
+
+-   **EXTEND:** stays the same
+-   **ORG:** formerly known as `OPENFOAM`. The CFDDirect/Foundation fork
+-   **COM:** formerly `PLUS`. The Version maintained by ESI/OpenCFD
+
+
+#### Additional output of `Allwmake`
+
+The current OpenFOAM-version and the version of the sources is
+printed in the beginning. This should help diagnosing problems
+
+
+#### Script `AllwmakeAll` that compiles requirements automatically
+
+The script compiles `bison` and `lua` before compiling
+`swak4Foam` itself. It also automatically sets
+`swakConfiguration` to a version that tries to find the scripting
+languages automatically
 
 
 ### Documentation
@@ -6328,7 +6530,21 @@ sometimes should make the intention clearer
 -   **none:** only `true` if everything is `false` (basically `not or`)
 
 
+#### `neighbourPatch`-function for expressions on `cyclic` patches
+
+The expression `neighbourPatch(foo)` on a cyclic patch gets the
+value of `foo` on the "other" side of the cyclic. For this the
+field has to be a `cyclic` or a subclass
+
+
 ### Enhancements
+
+
+#### `solverPerformanceToGlobalVariables` now supports vector fields
+
+With an additional (optional) parameter `vectorFieldNames` this
+function object now collects information about the performance of
+the linear solver for vector fields as well
 
 
 #### New file format for `funkyDoCalc`
@@ -6342,6 +6558,10 @@ allow specifying things that previously only specified on the command line:
 -   noDimensionChecking
 -   foreignMeshesThatFollowTime
 
+A list `libs` also allows specifying a list of libraries to
+load. This allows adding boundary conditions that would otherwise
+make the execution fail
+
 
 #### `funkyDoCalc` allows writing data as a dictionary
 
@@ -6350,4 +6570,171 @@ dictionary. It also includes a sub-dictionary with a copy of the
 specification file
 
 
+#### `funkyDoCalc` executes function objects
+
+With the `-allowFunctionObjects` the regular function objects
+from the `constrolDict` are now executed.
+
+If the new file format is used and there is an entry `functions`
+then the function objects specified there are executed (this
+allows setting up additional fields etc)
+
+A list `preloadFields` allows preloading fields that might be
+needed by the function objects
+
+**BUG**: using separate function
+objects causes a segmentation fault after the run
+finished. Probably because the function objects are inconsitently
+destroyed
+
+
+#### `groovyBCJump` now works for non-scalar boundary conditions
+
+Now the boundary condition works for non-scalar fields as well
+
+
+#### `groovyBC` now supports `neighbourField(foo)`
+
+If used on a cyclic patch then this will get the value of `foo`
+on the other side. Before this raise a `Not Implemented`-Error
+
+**Attention**: `foo` on the patch has to be a `groovyBC` for this
+ work (or any other BC that implements `patchNeighbourField()`
+
+
+#### `groovyBC` supports immersed boundary conditions in `Foam-extend 4.1`
+
+Immersed boundaries need special treatment because it is not a
+"real" boundary that should have a written value
+
+
 ### Examples
+
+
+#### `groovyBC/jumpChannel` to demonstrate `groovyBC` on cyclic boundaries
+
+This old test-example has been upgraded to a full example to
+demonstrate the use of `groovyBC` with the `cyclicSlave`-option
+and the `groovyBCJump`-condition
+
+
+#### `ImmersedBC/pitzDaily` to demonstrate *immersed boundary conditions* in `foam-extend`
+
+This demonstrates that swak-evaluations can be used for the
+immersed boundary conditions in `foam-extend`
+
+
+## Next release - version number : 0.4.3
+
+
+### New supported versions
+
+
+#### OpenFOAM+ v1906
+
+Adaptions supplied by Mark Olesen.
+
+This is currently the tested version in the ESI/OpenFOAM+ family
+
+
+#### OpenFOAM 7
+
+Compiles. Not fully tested
+
+
+#### OpenFOAM+ v1912
+
+Adaptions supplied by Mark Olesen.
+
+
+### Incompatibilities
+
+
+#### Bison older than version 3.3 no longer supported
+
+The removal of warnings in biosn 3.4 meant that bison 3.2 and
+older are no longr able to generate C++ sources from the grammar
+files
+
+
+### Bug fixes
+
+
+#### Compilation with `WM_LABEL_SIZE=64` for `foam-extend-4.1`
+
+Fix supplied by Danial Khazaei because compilation of `fe 4.1`
+broke when the `label` size was set to 64 bit. Now works with
+other distributions as well
+
+
+### Internals (for developers)
+
+
+### Infrastructure
+
+
+#### Support for `bison` 3.4
+
+The grammars have been adapted to generate C++-sources without
+warnings with bison 3.4. The script to compile requirements has
+been modified to download and compile this version.
+
+This breaks compatibility with bison 3.2 and older
+This is the latest stable release and only a bug-fix
+release. `luarocks` was upgraded as well
+Now if before compiling a command like
+
+    export SWAK_PYTHON3VERSION=6
+
+is executed then Python 3.6 is used even if a "better" Python
+like 3.7 is found. THe same is true for
+
+    export SWAK_PYTHON2VERSION=5
+
+(or similar).
+
+If these variables are not set the highest possible Python is
+used (like it was before)
+
+
+### Documentation
+
+
+#### Adapted contributors section in the README
+
+Removed outdated information, updated links
+
+
+### New features
+
+
+#### Expression run-time trigger for runtime-control in ESI-fork
+
+There now is a run-time trigger `swakExpression` that allows
+switching the runtime-control (for instance stopping the run)
+depending on a swak-expression.
+
+This works only for the ESI-fork. It **should** work with versions
+starting at 3.0+ but is currently only available starting with
+v1906 (modify `swak.H` if you want to enable/test it for older
+versions)
+
+The trigger is found in the `swakFunctionObjects`-library
+
+
+### Enhancements
+
+
+### Examples
+
+
+#### `groovyBC/nonBreakingDam` to demonstrate macro expansion
+
+This example demonstrates OpenFOAM macro-expansion inside of
+expression strings
+
+
+#### `runTimeCondition/simpleSwakCar` to demonstrate runtime-control in the ESI fork
+
+This example demonstrates the runtime-control for function
+objects that exists in the ESI-fork

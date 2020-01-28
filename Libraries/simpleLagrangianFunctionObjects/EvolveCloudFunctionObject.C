@@ -25,6 +25,7 @@ License
 
 Contributors/Copyright:
     2012-2013, 2015-2016, 2018 Bernhard F.W. Gschaider <bgschaid@hfd-research.com>
+    2018 Mark Olesen <Mark.Olesen@esi-group.com>
 
  SWAK Revision: $Id$
 \*---------------------------------------------------------------------------*/
@@ -36,7 +37,11 @@ Contributors/Copyright:
 #include "IOmanip.H"
 #include "swakTime.H"
 
-#include "uniformDimensionedFields.H"
+#ifdef FOAM_MESHOBJECT_GRAVITY
+# include "gravityMeshObject.H"
+#else
+# include "uniformDimensionedFields.H"
+#endif
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
@@ -59,7 +64,7 @@ EvolveCloudFunctionObject<CloudType>::EvolveCloudFunctionObject
     dict_(dict),
     regionName_(
         dict_.found("region")
-        ? dict_.lookup("region")
+        ? word(dict_.lookup("region"))
         : polyMesh::defaultRegion
     ),
     obr_(t.lookupObject<objectRegistry>(regionName_)),
@@ -79,8 +84,9 @@ EvolveCloudFunctionObject<CloudType>::EvolveCloudFunctionObject
         g_=newG;
     } else {
         const Time &runTime=t;
-        //        const fvMesh &mesh=dynamicCast<const fvMesh &>(obr_);
+        #ifndef FOAM_MESHOBJECT_GRAVITY
         const fvMesh &mesh=dynamic_cast<const fvMesh &>(obr_);
+        #endif
 
         #include "readGravitationalAcceleration.H"
         g_.dimensions().reset(g.dimensions());

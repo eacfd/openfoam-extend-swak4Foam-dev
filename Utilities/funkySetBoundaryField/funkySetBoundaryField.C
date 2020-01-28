@@ -30,6 +30,7 @@ Description
 
 Contributors/Copyright:
     2010, 2012-2014, 2016, 2018 Bernhard F.W. Gschaider <bgschaid@hfd-research.com>
+    2018 Mark Olesen <Mark.Olesen@esi-group.com>
 
  SWAK Revision: $Id$
 \*---------------------------------------------------------------------------*/
@@ -113,7 +114,7 @@ int main(int argc, char *argv[])
         forAllIter(dictionary,funkyDict,it) {
             const dictionary &part=(*it).dict();
 
-            word fieldName=part["field"];
+            word fieldName(part.lookup("field"));
 
             Info << "\n\nPart: " << (*it).keyword()
                 << " working on field " << fieldName << endl;

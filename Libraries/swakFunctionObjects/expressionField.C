@@ -26,6 +26,7 @@ License
 Contributors/Copyright:
     2010-2014, 2016-2018 Bernhard F.W. Gschaider <bgschaid@hfd-research.com>
     2013 Bruno Santos <wyldckat@gmail.com>
+    2018 Mark Olesen <Mark.Olesen@esi-group.com>
 
  SWAK Revision: $Id:  $
 \*---------------------------------------------------------------------------*/
@@ -132,7 +133,7 @@ void Foam::expressionField::read(const dictionary& dict)
         );
         autowrite_=Switch(dict.lookup("autowrite"));
         if(dict.found("dimension")) {
-            dimensions_.reset(dict.lookup("dimension"));
+            dimensions_.reset(dimensionSet(dict.lookup("dimension")));
             setDimensions_=true;
         } else {
             WarningIn("Foam::expressionField::read(const dictionary& dict)")

@@ -861,7 +861,7 @@ exprString CommonValueExpressionDriver::readExpression(
 ) {
     Sbug << "::readExpression " << name << endl;
 
-    string result=dict.lookup(name);
+    string result(dict.lookup(name));
 
     return expandDictVariables(
         result,
@@ -1625,7 +1625,7 @@ void CommonValueExpressionDriver::readTables(
 
     forAll(lines,i) {
         const dictionary &dict=lines[i];
-        tables.insert(dict.lookup("name"),TableType(dict));
+        tables.insert(word(dict.lookup("name")), TableType(dict));
     }
 }
 
@@ -1658,17 +1658,19 @@ const fvMesh &CommonValueExpressionDriver::regionMesh
         return mesh;
     }
 
-    Sbug << "Using mesh " << dict.lookup("region")  << endl;
+    const word regionName(dict.lookup("region"));
+
+    Sbug << "Using mesh " << regionName  << endl;
 
     if(
         !mesh.time().foundObject<objectRegistry>(
-            dict.lookup("region")
+            regionName
         )
         &&
         readIfNecessary
     ) {
         WarningIn("CommonValueExpressionDriver::regionMesh")
-            << "Region " << dict.lookup("region")
+            << "Region " << regionName
                 << " not in memory. Trying to register it"
                 << endl;
 
@@ -1676,7 +1678,7 @@ const fvMesh &CommonValueExpressionDriver::regionMesh
             new fvMesh
             (
                 IOobject(
-                    word(dict.lookup("region")),
+                    regionName,
                     mesh.time().constant(),
                     mesh.time(),
                     IOobject::MUST_READ
@@ -1690,7 +1692,7 @@ const fvMesh &CommonValueExpressionDriver::regionMesh
     //     return dynamicCast<const fvMesh&>( // soesn't work with gcc 3.2
     return dynamic_cast<const fvMesh&>(
         mesh.time().lookupObject<objectRegistry>(
-            dict.lookup("region")
+            regionName
         )
     );
 }
@@ -1753,7 +1755,7 @@ word CommonValueExpressionDriver::getTypeOfSet(const word &inName) const
             name,
             mesh().time().timeName(),
             polyMesh::meshSubDir/"sets",
-	    mesh(),
+            mesh(),
             IOobject::MUST_READ,
             IOobject::NO_WRITE
         );
@@ -1901,15 +1903,35 @@ string CommonValueExpressionDriver::outputEntry()
 
     word rType=getResultType();
     if(rType==pTraits<scalar>::typeName) {
+#ifdef FOAM_WRITEENTRY_NOT_MEMBER_OF_LIST
+        writeEntry(o,result_.getResult<scalar>(true)());
+#else
         result_.getResult<scalar>(true)().writeEntry("",o);
+#endif
     } else if(rType==pTraits<vector>::typeName) {
+#ifdef FOAM_WRITEENTRY_NOT_MEMBER_OF_LIST
+        writeEntry(o,result_.getResult<vector>(true)());
+#else
         result_.getResult<vector>(true)().writeEntry("",o);
+#endif
     } else if(rType==pTraits<tensor>::typeName) {
+#ifdef FOAM_WRITEENTRY_NOT_MEMBER_OF_LIST
+        writeEntry(o,result_.getResult<tensor>(true)());
+#else
         result_.getResult<tensor>(true)().writeEntry("",o);
+#endif
     } else if(rType==pTraits<symmTensor>::typeName) {
+#ifdef FOAM_WRITEENTRY_NOT_MEMBER_OF_LIST
+        writeEntry(o,result_.getResult<symmTensor>(true)());
+#else
         result_.getResult<symmTensor>(true)().writeEntry("",o);
+#endif
     } else if(rType==pTraits<sphericalTensor>::typeName) {
+#ifdef FOAM_WRITEENTRY_NOT_MEMBER_OF_LIST
+        writeEntry(o,result_.getResult<sphericalTensor>(true)());
+#else
         result_.getResult<sphericalTensor>(true)().writeEntry("",o);
+#endif
     } else {
         o << "No implementation for " << rType << ";";
     }

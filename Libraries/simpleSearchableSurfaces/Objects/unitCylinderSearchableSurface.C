@@ -126,7 +126,7 @@ void Foam::unitCylinderSearchableSurface::findLineAll
     point pt0=start+f[0]*dir;
     pt0.z()=0;
     if(
-        mag(topIntersect)>HUGE
+        mag(topIntersect)>GREAT
         ||
         mag(pt0)>1
     ) {
@@ -138,7 +138,7 @@ void Foam::unitCylinderSearchableSurface::findLineAll
     point pt1=start+f[1]*dir;
     pt1.z()=0;
     if(
-        mag(bottomIntersect)>HUGE
+        mag(bottomIntersect)>GREAT
         ||
         magSqr(pt1)>1
     ) {
@@ -402,7 +402,7 @@ void Foam::unitCylinderSearchableSurface::getVolumeType
 ) const
 {
     volType.setSize(points.size());
-    volType = INSIDE;
+    volType = VOLTYPE_INSIDE;
 
     forAll(points, pointI)
     {
@@ -416,11 +416,11 @@ void Foam::unitCylinderSearchableSurface::getVolumeType
             (pt.x()*pt.x() + pt.y()*pt.y()) > 1
         )
         {
-            volType[pointI] = OUTSIDE;
+            volType[pointI] = VOLTYPE_OUTSIDE;
         }
         else
         {
-            volType[pointI] = INSIDE;
+            volType[pointI] = VOLTYPE_INSIDE;
         }
     }
 }

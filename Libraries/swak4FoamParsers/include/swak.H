@@ -35,7 +35,7 @@ SourceFiles
 Contributors/Copyright:
     2012-2018 Bernhard F.W. Gschaider <bgschaid@hfd-research.com>
     2015-2016 Bruno Santos <wyldckat@gmail.com>
-    2016-2018 Mark Olesen <Mark.Olesen@esi-group.com>
+    2016-2019 Mark Olesen <Mark.Olesen@esi-group.com>
 
  SWAK Revision: $Id$
 \*---------------------------------------------------------------------------*/
@@ -200,11 +200,11 @@ Contributors/Copyright:
 #define FOAM_FVOPTIONS_IN_FV
 #endif
 
-#if defined(FOAM_VERSION4SWAK_IS_COM) || (defined(FOAM_VERSION4SWAK_IS_ORG) && FOAM_VERSION4SWAK>VERSION_NR2(2,2))
+#if defined(OPENFOAM_COM) || (defined(FOAM_VERSION4SWAK_IS_ORG) && FOAM_VERSION4SWAK>VERSION_NR2(2,2))
 #define FOAM_HAS_ACMI_INTERFACE
 #endif
 
-#if defined(FOAM_VERSION4SWAK_IS_COM) || (defined(FOAM_VERSION4SWAK_IS_ORG) && FOAM_VERSION4SWAK>VERSION_NR2(2,2))
+#if defined(OPENFOAM_COM) || (defined(FOAM_VERSION4SWAK_IS_ORG) && FOAM_VERSION4SWAK>VERSION_NR2(2,2))
 #define FOAM_HAS_AMI_INTERFACE
 #endif
 
@@ -232,6 +232,10 @@ Contributors/Copyright:
 
 #ifndef FOAM_VERSION4SWAK_IS_EXTEND
 #define FOAM_SEARCHABLE_SURF_HAS_BOUND_METHOD
+#endif
+
+#if (OPENFOAM_COM >= 1902)
+#define FOAM_SEARCHABLE_SURFACE_HAS_OUTSIDEVOLUMETYPE
 #endif
 
 #ifndef FOAM_VERSION4SWAK_IS_EXTEND
@@ -317,6 +321,10 @@ Contributors/Copyright:
 #define FOAM_JUMP_IS_JUMP_CYCLIC
 #endif
 
+#ifndef FOAM_VERSION4SWAK_IS_EXTEND
+#define FOAM_CYCLIC_FV_PATCH_FIELD_HAS_NEIGHBOUR_PATCH
+#endif
+
 #ifdef FOAM_VERSION4SWAK_IS_EXTEND
 #define FOAM_OLD_THERMOPHYSICS
 #endif
@@ -353,7 +361,8 @@ Contributors/Copyright:
 #define FOAM_MESH2MESH_NO_2ND_ORDER_TENSOR
 #endif
 
-#if FOAM_VERSION4SWAK > VERSION_NR2(2,2) && !defined(FOAM_VERSION4SWAK_IS_EXTEND)
+#if (FOAM_VERSION4SWAK > VERSION_NR2(2,2) && !defined(FOAM_VERSION4SWAK_IS_EXTEND)) || \
+    (FOAM_VERSION4SWAK > VERSION_NR(4,0,9) && defined(FOAM_VERSION4SWAK_IS_EXTEND))
 #define FOAM_VOLUMETYPE_IS_TYPE
 #endif
 
@@ -439,7 +448,7 @@ Contributors/Copyright:
 #define FOAM_LDUMATRIX_SOLVERPERFORMANCE
 #endif
 
-#if (defined(FOAM_VERSION4SWAK_IS_COM) && OPENFOAM_COM < 1612)      \
+#if (defined(OPENFOAM_COM) && OPENFOAM_COM < 1612)      \
         || (defined(FOAM_VERSION4SWAK_IS_ORG) && FOAM_VERSION4SWAK<VERSION_NR(5,0,0))
 #define FOAM_SOLVERPERFORMANCE_NITERATIONS_NO_VECTOR
 #endif
@@ -546,7 +555,7 @@ Contributors/Copyright:
 #define FOAM_RANDOM_CLASS_NEW_INTERFACE
 #endif
 
-#if (defined(FOAM_VERSION4SWAK_IS_ORG) && FOAM_VERSION4SWAK>=VERSION_NR(5,0,0))
+#if (defined(FOAM_VERSION4SWAK_IS_ORG) && FOAM_VERSION4SWAK>VERSION_NR(5,0,0))
 #define FOAM_RANDOM_CLASS_GAUSS_RENAMED
 #endif
 
@@ -560,12 +569,17 @@ Contributors/Copyright:
 #define FOAM_REGIOOBJECT_WRITEOBJECT_WITH_VALID
 #endif
 
-#if (OPENFOAM_COM >= 1803)
+#if (OPENFOAM_COM >= 1803) \
+    || (defined(FOAM_VERSION4SWAK_IS_ORG) && FOAM_VERSION4SWAK>=VERSION_NR(7,0,0))
 #define FOAM_LIST_HAS_MOVABLE_CONSTRUCT
 #endif
 
+#if FOAM_VERSION4SWAK >= VERSION_NR(4,1,0) && defined(FOAM_VERSION4SWAK_IS_EXTEND)
+#define FOAM_HAS_IMMERSED_BOUNDARY_CONDITION
+#endif
+
 #if (OPENFOAM_COM >= 1803)
-#define FOAM_HASH_PTR_LIST_ACCEPTS_NO_RAW_POINTERS
+#define FOAM_HASH_PTR_TABLE_ACCEPTS_NO_RAW_POINTERS
 #endif
 
 #if (OPENFOAM_COM >= 1803)
@@ -576,12 +590,54 @@ Contributors/Copyright:
 #define FOAM_MESHTOMESH_WANTS_PROCMAP_PARAMETER
 #endif
 
+#if (OPENFOAM_COM >= 1811)
+#define FOAM_MESHOBJECT_GRAVITY
+#endif
+
+#if (OPENFOAM_COM >= 1902)
+#define FOAM_UNIFIED_SURFACE_WRITERS
+#endif
+
 #if (defined(FOAM_VERSION4SWAK_IS_ORG) && FOAM_VERSION4SWAK>=VERSION_NR(6,0,0))
 #define FOAM_TIME_HAS_SEPARATE_SETDELTAT_NOADJUST
 #endif
 
+#if (defined(FOAM_VERSION4SWAK_IS_ORG) && FOAM_VERSION4SWAK>=VERSION_NR(7,0,0))
+#define FOAM_POINTFIELD_OPERATIONS_NEED_PRIMITIVE
+#endif
+
+#if (defined(FOAM_VERSION4SWAK_IS_ORG) && FOAM_VERSION4SWAK>=VERSION_NR(7,0,0))
+#define FOAM_WRITEENTRY_NOT_MEMBER_OF_LIST
+#endif
+
+#if (defined(FOAM_VERSION4SWAK_IS_ORG) && FOAM_VERSION4SWAK>=VERSION_NR(7,0,0))
+#define FOAM_HAS_SAMPLEDSURFACES_NAMESPACE
+#endif
+
+#if (defined(FOAM_VERSION4SWAK_IS_ORG) && FOAM_VERSION4SWAK>=VERSION_NR(7,0,0))
+#define FOAM_SOLVER_PERFORMANCE_NOT_MEMBER_OF_DATA
+#endif
+
+#if (defined(FOAM_VERSION4SWAK_IS_ORG) && FOAM_VERSION4SWAK>=VERSION_NR(7,0,0))
+#define FOAM_WRITECONTROL_IN_TIME_CHANGED
+#endif
+
+#if (defined(FOAM_VERSION4SWAK_IS_ORG) && FOAM_VERSION4SWAK>=VERSION_NR(7,0,0))
+#define FOAM_AMIINTERPOLATION_NOT_PATCH2PATCH
+#endif
+
+#if (OPENFOAM_COM >= 1911)
+#define FOAM_FILESTAT_HAS_NO_ISVALID_METHOD
+#endif
+
+// this exists since 3.0+ but I'm to lazy to test it on older versions
+#if (OPENFOAM_COM >= 1906)
+#define FOAM_RUNTIME_CONDITION
+#endif
+
 #include "swakVersion.H"
 #include "DebugOStream.H"
+#include "BackportMacros.H"
 
 #endif
 

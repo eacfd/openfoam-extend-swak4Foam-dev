@@ -25,6 +25,7 @@ License
 
 Contributors/Copyright:
     2013, 2015-2018 Bernhard F.W. Gschaider <bgschaid@hfd-research.com>
+    2018 Mark Olesen <Mark.Olesen@esi-group.com>
 
  SWAK Revision: $Id$
 \*---------------------------------------------------------------------------*/
@@ -114,7 +115,7 @@ StateMachine::StateMachine(
     ),
     initialState_(
         stateCode(
-            dict.lookup("initialState")
+            word(dict.lookup("initialState"))
         )
     ),
     state_(initialState_),
@@ -163,7 +164,7 @@ StateMachine::StateTransition::StateTransition(
     ),
     logicalAccumulation_(
         LogicalAccumulationNamedEnum::names[
-            data.lookup("logicalAccumulation")
+            word(data.lookup("logicalAccumulation"))
         ]
     )
 {

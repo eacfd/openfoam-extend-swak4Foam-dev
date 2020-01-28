@@ -30,6 +30,7 @@ Description
 
 Contributors/Copyright:
     2006-2014, 2016, 2018 Bernhard F.W. Gschaider <bgschaid@hfd-research.com>
+    2018 Mark Olesen <Mark.Olesen@esi-group.com>
 
  SWAK Revision: $Id$
 \*---------------------------------------------------------------------------*/
@@ -569,7 +570,7 @@ int main(int argc, char *argv[])
 
                     Info << "\n\nPart: " << (*iter).keyword() << endl;
 
-                    word field=part["field"];
+                    word field(part.lookup("field"));
 
                     exprString expression(
                         part["expression"],

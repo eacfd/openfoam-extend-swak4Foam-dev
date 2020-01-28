@@ -26,6 +26,7 @@ License
 Contributors/Copyright:
     2009-2013, 2016-2018 Bernhard F.W. Gschaider <bgschaid@hfd-research.com>
     2010 Marianne Mataln <mmataln@ice-sf>
+    2018 Mark Olesen <Mark.Olesen@esi-group.com>
 
  SWAK Revision: $Id$
 \*---------------------------------------------------------------------------*/
@@ -149,9 +150,7 @@ PatchValueExpressionDriver::PatchValueExpressionDriver(
                     mesh,
                     searchOnDisc()
                 ),
-                dict.lookup(
-                    "patchName"
-                )
+                word(dict.lookup("patchName"))
             )
         ]
     ),
@@ -501,7 +500,7 @@ const word PatchValueExpressionDriver::getInterpolationScheme(const word &name)
                 << ". Using 'default'"
                 << endl;
 
-        word scheme(word(mappingInterpolationSchemes_.lookup("default")));
+        word scheme(mappingInterpolationSchemes_.lookup("default"));
         mappingInterpolationSchemes_.add(name,scheme);
 
         return scheme;

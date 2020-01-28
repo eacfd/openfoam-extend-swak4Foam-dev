@@ -110,6 +110,16 @@ public:
             return delegate().hasVolumeType();
         }
 
+        //- What is type of points outside bounds
+        virtual volumeType outsideVolumeType() const
+        {
+#ifdef FOAM_SEARCHABLE_SURFACE_HAS_OUTSIDEVOLUMETYPE
+            return delegate().outsideVolumeType();
+#else
+            return VOLTYPE_UNKNOWN;
+#endif
+        }
+
         label size() const {
             return delegate().size();
         }

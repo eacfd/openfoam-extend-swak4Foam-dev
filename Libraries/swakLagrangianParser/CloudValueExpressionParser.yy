@@ -26,7 +26,7 @@ Description
 
 
 Contributors/Copyright:
-    2010-2013, 2015-2016, 2018 Bernhard F.W. Gschaider <bgschaid@hfd-research.com>
+    2010-2013, 2015-2018 Bernhard F.W. Gschaider <bgschaid@hfd-research.com>
 
  SWAK Revision: $Id:  $
 \*---------------------------------------------------------------------------*/
@@ -34,7 +34,7 @@ Contributors/Copyright:
 %skeleton "lalr1.cc"
 /* %require "2.1a" */
 %defines
-%define parser_class_name {CloudValueExpressionParser}
+%define api.parser.class {CloudValueExpressionParser}
 
 %{
 #include <volFields.H>
@@ -76,7 +76,7 @@ Contributors/Copyright:
 };
 
 %debug
-%error-verbose
+%define parse.error verbose
 
 %union
 {

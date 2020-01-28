@@ -162,6 +162,7 @@ weights               return token::TOKEN_weights;
 snGrad                return token::TOKEN_snGrad;
 internalField         return token::TOKEN_internalField;
 neighbourField        return token::TOKEN_neighbourField;
+neighbourPatch        return token::TOKEN_neighbourPatch;
 oldTime               return token::TOKEN_oldTime;
 normal                return token::TOKEN_normal;
 rand                  { BEGIN(needsIntegerParameter); return token::TOKEN_rand; }
@@ -343,7 +344,7 @@ void PatchValueExpressionDriver::scan_begin ()
     }
 
     yylex_init(&scanner_);
-    struct yyguts_t * yyg = (struct yyguts_t*)scanner_;
+    struct yyguts_t * yyg = static_cast<struct yyguts_t*>(scanner_);
     yy_flex_debug = traceScanning();
     /* bufferPatch= */ yy_scan_string(content().c_str(),scanner_);
 
@@ -385,7 +386,7 @@ void PatchValueExpressionDriver::startEatCharacters()
         Info << "Scanner: " << getHex(scanner_) << endl;
     }
 
-    struct yyguts_t * yyg = (struct yyguts_t*)scanner_;
+    struct yyguts_t * yyg = static_cast<struct yyguts_t*>(scanner_);
     BEGIN(parsedByOtherParser);
 }
 
@@ -397,7 +398,7 @@ void PatchValueExpressionDriver::startVectorComponent()
         Info << "Scanner: " << getHex(scanner_) << endl;
     }
 
-    struct yyguts_t * yyg = (struct yyguts_t*)scanner_;
+    struct yyguts_t * yyg = static_cast<struct yyguts_t*>(scanner_);
     BEGIN(vectorcomponent);
 }
 
@@ -409,6 +410,6 @@ void PatchValueExpressionDriver::startTensorComponent()
         Info << "Scanner: " << getHex(scanner_) << endl;
     }
 
-    struct yyguts_t * yyg = (struct yyguts_t*)scanner_;
+    struct yyguts_t * yyg = static_cast<struct yyguts_t*>(scanner_);
     BEGIN(tensorcomponent);
 }

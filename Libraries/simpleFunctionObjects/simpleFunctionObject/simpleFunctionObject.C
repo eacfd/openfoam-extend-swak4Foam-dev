@@ -25,6 +25,7 @@ License
 
 Contributors/Copyright:
     2008-2013, 2015-2018 Bernhard F.W. Gschaider <bgschaid@hfd-research.com>
+    2018 Mark Olesen <Mark.Olesen@esi-group.com>
 
  SWAK Revision: $Id$
 \*---------------------------------------------------------------------------*/
@@ -108,7 +109,7 @@ simpleFunctionObject::simpleFunctionObject
     ),
     regionName_(
         dict_.found("region")
-        ? dict_.lookup("region")
+        ? word(dict_.lookup("region"))
         : polyMesh::defaultRegion
     ),
     obr_(time_.lookupObject<objectRegistry>(regionName_))

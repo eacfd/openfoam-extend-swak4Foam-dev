@@ -174,8 +174,7 @@ tmp<Field<Type> > groovyBCJumpAMIFvPatchField<Type>::jump() const
         Field<Type> &jf=const_cast<Field<Type>&>(tjf());
 
         jf = driver.evaluate<Type>(this->jumpExpression_);
-
-        return jf;
+        return tjf;
     } else {
        const groovyBCJumpAMIFvPatchField& nbrPatch =
            refCast<const groovyBCJumpAMIFvPatchField<Type> >(
@@ -211,7 +210,11 @@ void groovyBCJumpAMIFvPatchField<Type>::write(Ostream& os) const
 
     driver_.writeCommon(os,debug);
 
-    this->writeEntry("value", os);
+#ifdef FOAM_WRITEENTRY_NOT_MEMBER_OF_LIST
+    writeEntry(os, "value", *this);
+#else
+    this->writeEntry("value",os);
+#endif
 }
 
 

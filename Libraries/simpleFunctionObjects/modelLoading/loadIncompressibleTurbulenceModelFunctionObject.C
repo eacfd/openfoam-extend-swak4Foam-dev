@@ -25,6 +25,7 @@ License
 
 Contributors/Copyright:
     2012-2013, 2015-2016, 2018 Bernhard F.W. Gschaider <bgschaid@hfd-research.com>
+    2018 Mark Olesen <Mark.Olesen@esi-group.com>
 
  SWAK Revision: $Id$
 \*---------------------------------------------------------------------------*/
@@ -72,14 +73,14 @@ loadIncompressibleTurbulenceModelFunctionObject::loadIncompressibleTurbulenceMod
 {
     return incompressible::turbulenceModel::New(
         obr().lookupObject<volVectorField>(
-            dict_.lookup("UName")
+            word(dict_.lookup("UName"))
         ),
         obr().lookupObject<surfaceScalarField>(
-            dict_.lookup("phiName")
+            word(dict_.lookup("phiName"))
         ),
         const_cast<transportModel &>(
             obr().lookupObject<transportModel>(
-                dict_.lookup("transportModel")
+                word(dict_.lookup("transportModel"))
             )
         )
     );
